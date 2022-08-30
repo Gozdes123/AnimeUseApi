@@ -237,7 +237,7 @@ function Days() {
         week = weekarray[date.getDay() - 1];
     }
     let day = document.querySelector('.' + week);
-    day.style.backgroundColor = '#7bdff2';
+    day.style.backgroundColor = 'rgba(42, 134, 239, 0.63)';
     day.style.color = 'white';
 }
 Days();
