@@ -5,7 +5,7 @@ fetch('./json/json.json')
 .then(function (menus) {
     //時程表
     var button = document.querySelectorAll('h2');
-       button.forEach(function (btn) {
+    button.forEach(function (btn) {
         btn.addEventListener(
             'click',
             function ScheduleVideo() {
@@ -22,7 +22,7 @@ fetch('./json/json.json')
             },
             false
         );
-    })
+    });
     //圖片瀏覽
     const sectionCenter = document.querySelector('.section-center');
     function displayMenuItems(menuItems) {
@@ -76,11 +76,9 @@ fetch('./json/json.json')
                 });
                 if (category === '全部') {
                     displayMenuItems(menus);
-                    Lightbox();
                     lovecolor();
                 } else {
                     displayMenuItems(menuCategory);
-                    Lightbox();
                     lovecolor();
                 }
             });
@@ -97,34 +95,73 @@ fetch('./json/json.json')
             }
         });
         displayMenuItems(searchCategory);
+        lovecolor();
     });
 
     // 燈箱
-    let lightbox = document.querySelectorAll(".photo")
-     lightbox.forEach(function (lightboxs) {
-      lightboxs.addEventListener('click', function(e) {
-          let number = lightboxs.id;
-          var modal = document.getElementById('myModal');
-          var modalImg = document.getElementById('img01');
-          const pictureCategory = menus.filter(function (menuItems) {
-              if (menuItems.id == number) {
-                  return menuItems;
-              }
-          });
+    $(document.body).on('click', '.photo', function () {
+        let number = this.id;
+        var modal = document.getElementById('myModal');
+        var modalImg = document.getElementById('img01');
+        const pictureCategory = menus.filter(function (menuItems) {
+            if (menuItems.id == number) {
+                return menuItems;
+            }
+        });
           if (pictureCategory[0] !== undefined) {
               var modalImg = document.getElementById('img01');
               let modalContent = pictureCategory[0].content;
               modal.style.display = 'block';
               modalImg.src = pictureCategory[0].img;
+              document.querySelector('#caption').innerHTML = modalContent;
               var span = document.getElementsByClassName('close')[0];
               span.onclick = function () {
                   modal.style.display = 'none';
               };
           }
-          showLow();
-});
+        showLow();
     });
-});
+    // 燈箱文字
+    var text;
+    function showLow() {
+        text = document.getElementById('caption').innerHTML;
+        document.getElementById('caption').innerHTML = `<div id="subText"></div><a id="btn"></a>`;
+        document.getElementById('subText').style.float = 'left';
+        document.getElementById('btn').style.float = 'left';
+        if (text.length > 9) {
+            document.getElementById('subText').innerHTML = text.substring(0, 50);
+            document.getElementById('btn').innerHTML = '...顯示全部';
+        } else {
+            document.getElementById('subText').innerHTML = text;
+            document.getElementById('btn').innerHTML = '';
+        }
+    }
+    //燈箱文字
+    $(document.body).on('click', '#btn', function () {
+        var t = document.getElementById('btn');
+        var tt = document.getElementById('subText');
+        if (t.innerHTML == '...顯示全部') {
+            tt.innerHTML = text;
+            t.innerHTML = '收起';
+        } else {
+            tt.innerHTML = text.substring(0, 50);
+            t.innerHTML = '...顯示全部';
+        }
+    });
+    function lovecolor() {
+        for (let i = 0; i < menus.length; i++) {
+            let btn = 'btn' + i;
+            let dom = document.querySelector('.' + btn);
+            if (localStorage.getItem(btn) !== null && dom !== null) {
+                document.querySelector('.' + btn).style.color = 'red';
+            }
+        }
+    }lovecolor();
+})
+.catch((err) => {
+console.log('錯誤:', err);
+})
+//menu
 $(document).ready(function () {
     $('.burgar_btn').click(function () {
         $('#menu').slideToggle('slow');
@@ -210,34 +247,6 @@ $(document).ready(function () {
         $('.img_nav_content_outside').slideToggle('slow');
     });
 });
-
-
-// 燈箱文字
-var text;
-function showLow() {
-    text = document.getElementById('caption').innerHTML;
-    document.getElementById('caption').innerHTML = `<div id="subText"></div><a id="btn" onclick="change()"></a>`;
-    document.getElementById('subText').style.float = 'left';
-    document.getElementById('btn').style.float = 'left';
-    if (text.length > 9) {
-        document.getElementById('subText').innerHTML = text.substring(0, 50);
-        document.getElementById('btn').innerHTML = '...顯示全部';
-    } else {
-        document.getElementById('subText').innerHTML = text;
-        document.getElementById('btn').innerHTML = '';
-    }
-}
-function change() {
-    var t = document.getElementById('btn');
-    var tt = document.getElementById('subText');
-    if (t.innerHTML == '...顯示全部') {
-        tt.innerHTML = text;
-        t.innerHTML = '收起';
-    } else {
-        tt.innerHTML = text.substring(0, 50);
-        t.innerHTML = '...顯示全部';
-    }
-}
 // 我的最愛
 function loveclick(btnlight) {
     let btn = 'btn' + btnlight;
@@ -250,15 +259,7 @@ function loveclick(btnlight) {
         localStorage.removeItem('btn' + btnlight);
     }
 }
-function lovecolor() {
-    for (let i = 0; i < menu.length; i++) {
-        let btn = 'btn' + i;
-        let dom = document.querySelector('.' + btn);
-        if (localStorage.getItem(btn) !== null && dom !== null) {
-            document.querySelector('.' + btn).style.color = 'red';
-        }
-    }
-}
+
 
 // 登入
 function Showname() {
@@ -286,7 +287,5 @@ function Favorite() {
     }
 }
 window.addEventListener('DOMContentLoaded', function () {
-    Lightbox();
     Showname();
-    lovecolor();
 });
