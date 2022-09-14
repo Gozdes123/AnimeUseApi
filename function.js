@@ -1,8 +1,7 @@
-fetch('./json/json.json')
-.then(function (response) {
-    return response.json();
-})
-.then(function (menus) {
+async function fetchapi() {
+  try{
+      let menus = await fetch('./json/json.json');
+    menus = await menus.json();
     //時程表
     var button = document.querySelectorAll('h2');
     button.forEach(function (btn) {
@@ -108,17 +107,17 @@ fetch('./json/json.json')
                 return menuItems;
             }
         });
-          if (pictureCategory[0] !== undefined) {
-              var modalImg = document.getElementById('img01');
-              let modalContent = pictureCategory[0].content;
-              modal.style.display = 'block';
-              modalImg.src = pictureCategory[0].img;
-              document.querySelector('#caption').innerHTML = modalContent;
-              var span = document.getElementsByClassName('close')[0];
-              span.onclick = function () {
-                  modal.style.display = 'none';
-              };
-          }
+        if (pictureCategory[0] !== undefined) {
+            var modalImg = document.getElementById('img01');
+            let modalContent = pictureCategory[0].content;
+            modal.style.display = 'block';
+            modalImg.src = pictureCategory[0].img;
+            document.querySelector('#caption').innerHTML = modalContent;
+            var span = document.getElementsByClassName('close')[0];
+            span.onclick = function () {
+                modal.style.display = 'none';
+            };
+        }
         showLow();
     });
     // 燈箱文字
@@ -156,11 +155,14 @@ fetch('./json/json.json')
                 document.querySelector('.' + btn).style.color = 'red';
             }
         }
-    }lovecolor();
-})
-.catch((err) => {
-console.log('錯誤:', err);
-})
+    }
+    lovecolor();
+  }
+  catch(error){
+    console.log("沒有抓到API"+error)
+  }
+}
+fetchapi();
 //menu
 $(document).ready(function () {
     $('.burgar_btn').click(function () {
