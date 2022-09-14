@@ -101,7 +101,6 @@ async function fetchapi() {
     $(document.body).on('click', '.photo', function () {
         let number = this.id;
         var modal = document.getElementById('myModal');
-        var modalImg = document.getElementById('img01');
         const pictureCategory = menus.filter(function (menuItems) {
             if (menuItems.id == number) {
                 return menuItems;
@@ -186,7 +185,7 @@ function creatAuto() {
         index++;
         refresh();
     }, 5000);
-}
+} creatAuto();
 function refresh() {
     let orange = document.querySelectorAll('.indicator');
     if (index < 0) {
@@ -216,14 +215,6 @@ function SetIndex(idx) {
     index = idx;
     refresh();
 }
-let autoTimer = creatAuto();
-let refreshWrapper = func => {
-    return function (...args) {
-        let result = func(...args);
-        autoTimer;
-        refresh();
-    };
-};
 refresh();
 // 顯示天數
 let date = new Date();
@@ -267,10 +258,8 @@ function loveclick(btnlight) {
 function Showname() {
     if (localStorage.getItem('root') !== null) {
         document.querySelector('.rename').textContent = localStorage.getItem('root') + '/Logout';
-        document.querySelector('.renamephone').textContent = localStorage.getItem('root') + '/Logout';
     } else {
         document.querySelector('.rename').textContent = 'Login';
-        document.querySelector('.renamephone').textContent = 'Login';
     }
 }
 function Login() {
